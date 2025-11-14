@@ -85,11 +85,13 @@ run
 ```
 This will Execute the Payload using all the Parameters set and give Access to the Targets Machine
 
-TAKE SS OF EXPLOIT WORKING
-
 ---
 
-## 
+## Escalate
+
+**Objective:** Escalate the Privilege of the Shell Obtained to Grant further Access
+
+1. 
 
 ---
 
