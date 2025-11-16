@@ -14,7 +14,7 @@ A Windows host exploited remotely: a discovered vulnerability was used to achiev
 ## Environment & Tools
 
 * <Target IP>
-* Attacker: Kali Linux (tools used: `nmap`, `msfconsole`, `metasploit`)
+* Attacker: Kali Linux (tools used: `nmap`, `msfconsole`, `metasploit`, `Hashes.com`)
 * Notes: This writeup is sanitized for public posting. Replace `REDACTED` with your personal notes if you keep a private copy.
 
 ---
@@ -115,24 +115,56 @@ This should open up a Meterpreter Shell with Elevated Privileges. To check this,
 
 ---
 
-## 
+## Cracking
+
+**Objective:** Extract the Valueable Data, in this case the Passwords, from the Target Machine
+
+1. Migrate to a Process that is Running at the Elevated Privilege (NT AUTHORITY\SYSTEM)
+```bash
+ps
+```
+This should output the Processes Running, Choose a Process that is Running under the Elevated Privilege and Note the Process ID (PID)
+```bash
+migrate <PID>
+```
+
+2. Once Migrated, Run Hashdump to find the User it is Asking for as well as the associated Hash which is their Authentication Credentials
+```bash
+hashdump
+```
+With the Hashed Password of the User, go to any Decrypting Website and paste the Hash to Decrypt the Password
 
 ---
 
-## 
+## Flags
+
+**Objective:** Find Flags 1, 2, and 3 in the Targets Windows File System
+
+1. Flag 1: By going to the Root Directory and Checking all the Files we can find flag1.txt here
+```bash
+cd ../../..
+ls
+cat flag1.txt
+```
+Simply Concatenate the .txt file and you will receive the first Flag
+
+2. Flag 2: Given the Hint from the Question, we understand that the flag is where Windows stores the Passwords Locally. This Directory being 'C:\\Windows\System32\config'
+```bash
+cd Windows/System32/config
+ls
+cat flag2.txt
+```
+Concatenate the Second Flag
+
+3. Flag 3: From the Hint, we understand that the final Flag is located in the Admins Files. The Admin in this Machine being Jon as figured out from the 'Cracking' Phase. To reach Jon's Documents, 'cd' back to the Root Directory then forward to Users Directory and into Jon's Directory. By checking his files, we can find the Flag in his Documents folder.
+```bash
+cd ../../../Users/Jon/Documents
+ls
+cat flag3.txt
+```
 
 ---
 
-##
+## Conclusion
 
----
 
-## 
-
----
-
-## 
-
----
-
-## 
