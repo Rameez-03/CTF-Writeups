@@ -167,4 +167,6 @@ cat flag3.txt
 
 ## Conclusion
 
+This room demonstrated a full exploitation chain against a vulnerable Windows machine, beginning with service enumeration and the identification of SMBv1 as an exposed attack surface. Leveraging the MS17-010 vulnerability allowed remote code execution and an initial foothold on the system. From there, privilege escalation was achieved through Metasploit tooling to obtain SYSTEM-level access, followed by credential extraction and flag discovery. Overall, this exercise reinforces the importance of regular patching, secure service configuration, and restricted privilege models within Windows environments.
+
 
