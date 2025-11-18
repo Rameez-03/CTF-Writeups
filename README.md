@@ -10,12 +10,14 @@ Each writeup is structured to follow a professional penetration-testing flow:
 
 ## 📁 Repository Structure
 
+```
 CTF-Writeups/
 │
 ├── Blue/
 │ └── README.md # Complete writeup for TryHackMe: Blue
 │
 └── README.md # (You are here)
+```
 
 ---
 
