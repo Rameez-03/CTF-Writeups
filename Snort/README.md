@@ -73,7 +73,7 @@ cd Desktop/Task-Exercises/
 ## Task 4 - First Interaction with Snort
 
 **Objective 1:** Run the Snort instance and check the build number.
-1. Run Snort 
+1.Run Snort 
 ```bash
 snort -V
 ```
@@ -114,7 +114,82 @@ Initializing rule chains...
 
 ---
 
-## Flags
+## Task 5 - Operational Mode 1: Sniffer Mode
+
+**Objective:** Practice the parameter combinations by using the traffic-generator script.
+**Answer:** *No Answer Needed*
+
+---
+
+## Task 6 - Operation Mode 2: Packet Logger Mode
+
+**Objective 1:** What is the source port used to connect port 53?
+1.Run the default configuration file with ASCII Mode 
+```bash
+sudo snort -dev -K ASCII -l.
+```
+2.On another Terminal, Execute Traffic Generator script, choose "Task-6 Exercise" and let it run. Kill the previous process once this is done running.
+```bash
+sudo ./traffic-generator.sh
+```
+3.A 145.254.160.237 Folder is created, Change the permissions for the folder and naviagte inside. Display the contents
+```bash
+sudo chmod 777 145.254.160.237
+cd 145.254.160.237
+ls
+```
+**Answer:** *3009*
+
+**Objective 2:** Read the snort.log file with Snort; what is the IP ID of the 10th packet
+1. Navigate to "TASK-6", Run snort on the log file to read the 10th packet
+```bash
+snort -r snort.log.1640048004 -n 10
+```
+**Answer:** *49313*
+
+**Objective 3:** Read the "snort.log.1640048004" file with Snort; what is the referer of the 4th packet
+1.Run snort for 4 packets and change the options so that the referer is displayed
+```bash
+snort -dvr snort.log.1640048004 -n 4
+```
+**Answer:** *http://www.ethereal.com/development.html*
+
+**Objective 4:** Read the "snort.log.1640048004" file with Snort; what is the Ack number of the 8th packet
+1.Run snort for 8 packets and read the ACK flag for the last one
+```bash
+snort -r snort.log.1640048004 -n 8
+```
+**Answer:** *0x38AFFFF3*
+
+**Objective 5:** Read the "snort.log.1640048004" file with Snort; what is the number of the "TCP port 80" packets
+1.Run snort on the entire log file and find the number of packets in TCP port 80
+```bash
+snort -r snort.log.1640048004 
+```
+**Answer:** *41*
+
+---
+
+## Task 7 - Operation Mode 3: IDS/IPS
+
+**Objective 1:** What is the number of the detected HTTP GET methods
+1.Use Snort on the defualt configuration file
+```bash
+sudo snort -c /etc/snort/snort.conf -A full -l.
+```
+2.On another Terminal, Execute Traffic Generator script, choose "Task-6 Exercise" and let it run. Kill the previous process once this is done running.
+```bash
+sudo ./traffic-generator.sh
+```
+3.Analyse the output of the process that has just been killed
+**Answer:** *2*
+
+**Objective 2:** You can practice the rest of the parameters by using the traffic-generator script.
+**Answer** *No Answer Needed*
+
+---
+
+## Task 8 - Operation Mode 4: PCAP Investigation
 
 
 
