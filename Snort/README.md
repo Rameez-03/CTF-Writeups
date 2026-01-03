@@ -191,12 +191,152 @@ sudo ./traffic-generator.sh
 
 ## Task 8 - Operation Mode 4: PCAP Investigation
 
+**Objective 1:** What is the number of the generated alerts in the mx-1.pcap file
+1.Navigate to the "TASK-8" files where the mx-1.pcap is stored
+```bash
+cd Desktop/Task-Exercises/Exercise-Files/TASK-8
+```
+2.Run the command on the file with the defualt configurations
+```bash
+sudo snort -c /etc/snort/snort.conf -A full -l . -r mx-1.pcap
+```
+**Answer:** *170*
 
+**Objective 2:** Keep reading the output. How many TCP Segments are Queued in the mx-1.pcap file
+1.The Queued TCP Segments are also within the output of the last command, located within the "Stream Statistics"
+**Answer:** *18*
+
+**Objective 3:** Keep reading the output.How many "HTTP response headers" were extracted in the mx-1.pcap file
+1.The HTTP Response Headers are also within the output of the last command, located within the "HTTP Inspect - encodings"
+**Answer:** *3*
+
+**Objective 4:** What is the number of the generated alerts in the mx-1.pcap file with the SECOND Configuration File
+1.Run the command on the file with the second configurations, the alerts are located in the "Action Stats" of the output
+```bash
+sudo snort -c /etc/snort/snortv2.conf -A full -l . -r mx-1.pcap
+```
+**Answer:** *68*
+
+**Objective 5:** What is the number of the generated alerts in the mx-2.pcap file
+1.Run the command on the file with the defualt configurations, the alerts are located in the "Action Stats" of the output
+```bash
+sudo snort -c /etc/snort/snort.conf -A full -l . -r mx-2.pcap
+```
+**Answer:** *340*
+
+**Objective 6:** Keep reading the output. What is the number of the detected TCP packets in the mx-2.pcap file
+1.The Detected TCP Packets are also within the output of the last command, located within the "Breakdown by Protocol"
+**Answer:** *82*
+
+**Objective 7:** What is the number of the generated alerts in the mx-2.pcap file and mx-3.pcap file
+1.Run the command on both files with the defualt configurations, the alerts are located in the "Action Stats" of the output
+```bash
+sudo snort -c /etc/snort/snort.conf -A full -l . --pcap-list="mx-2.pcap mx-3.pcap"
+```
+**Answer:** *1020*
+
+---
+
+## Task 9 - Snort Rule Structure
+
+**Objective 1:** Use "task9.pcap". Write a rule to filter IP ID "35369" and run it against the given pcap file. What is the request name of the detected packet? You may use this command: "snort -c local.rules -A full -l . -r task9.pcap"
+
+1.Navigate to "TASK-9" Directory
+```bash
+cd Desktop/Task-Exercises/Exercise-Files/TASK-8
+```
+2.We need access to the "local.rules" file where all the filter rules are, we need to use elevated permissions in order to access and modify
+```bash
+sudo nano /etc/snort/rules/local.rules
+```
+3.We need to write the rules and add it to the file. The objective asks to filter IP ID 35369, therefore we will save it to a file called "alert" with any source or destination IPs and the correct options
+```bash
+alert ip any any <> any any (msg: "IP ID 35369 Detected"; id:35369; sid:100001; rev:1;)
+```
+4.Save and exit the file then Run the task9.pcap file with default configurations
+```bash
+snort -c /etc/snort/snort.conf -A full -l . -r task9.pcap
+```
+5.The file "alert" is created, concatenate the file and find the ID "35369". Then read the name of the packet
+```bash
+cat alert
+```
+**Answer:** *Timestamp Request*
+
+**Objective 2:** Clear the previous alert file and comment out the old rules. Create a rule to filter packets with Syn flag and run it against the given pcap file. What is the number of detected packets?
+
+1.Access the Rules file with elevated privileges like last time then comment out the previous rule. Add the new rule which filters packets with SYN flag, key for this rule is the "flags" option being set to S
+```bash
+sudo nano /etc/snort/rules/local.rules
+##alert ip any any <> any any (msg: "IP ID 35369 Detected"; id:35369; sid:100001; rev:1;)
+alert tcp any any <> any any (msg: "SYN Packet Detected"; flags:S; sid:100002; rev:1;)
+```
+2.Save and exit the file then Run the task9.pcap file with default configurations
+```bash
+snort -c /etc/snort/snort.conf -A full -l . -r task9.pcap
+```
+3.Alert file has been created like last time, however since the file is large, use grep to filter for the message we wrote in the rule "SYN Pakcet Detected". This allows us to find the packet easier
+```bash
+grep "SYN Packet Detected" alert | wc -l
+```
+**Answer:** *1*
+
+**Objective 3:** Clear the previous alert file and comment out the old rules. Write a rule to filter packets with Push-Ack flags and run it against the given pcap file. What is the number of detected packets?
+
+1.Access the Rules file with elevated privileges like last time then comment out the previous rule. Add the new rule which filters packets with Push-Ack flag, key for this rule is the "flags" option being set to PA
+```bash
+sudo nano /etc/snort/rules/local.rules
+##alert ip any any <> any any (msg: "IP ID 35369 Detected"; id:35369; sid:100001; rev:1;)
+##alert tcp any any <> any any (msg: "SYN Packet Detected"; flags:S; sid:100002; rev:1;)
+alert tcp any any <> any any (msg: "Push-Ack Packet Detected"; flags:PA; sid:100003; rev:1;)
+```
+2.Save and exit the file then Run the task9.pcap file with default configurations
+```bash
+snort -c /etc/snort/snort.conf -A full -l . -r task9.pcap
+```
+3.Alert file has been created like last time, however since the file is large, use grep to filter for the message we wrote in the rule "Push-Ack Packet Detected". This allows us to find the packet easier
+```bash
+grep "Push-Ack Packet Detected" alert | wc -l
+```
+**Answer:** *216*
+
+**Objective 4:** Clear the previous alert file and comment out the old rules. Create a rule to filter UDP packets with the same source and destination IP and run it against the given pcap file. What is the number of packets that show the same source and destination address?
+
+1.Access the Rules file with elevated privileges like last time then comment out the previous rule. Add the new rule which filters UDP Packets with the same IP, key for this rule is enabling "sameip" in the options of the rule
+```bash
+sudo nano /etc/snort/rules/local.rules
+##alert ip any any <> any any (msg: "IP ID 35369 Detected"; id:35369; sid:100001; rev:1;)
+##alert tcp any any <> any any (msg: "SYN Packet Detected"; flags:S; sid:100002; rev:1;)
+##alert tcp any any <> any any (msg: "Push-Ack Packet Detected"; flags:PA; sid:100003; rev:1;)
+alert ip any any <> any any (msg: "Same Source-Destination IP Detected"; sameip; sid:100004; rev:1;)
+```
+2.Save and exit the file then Run the task9.pcap file with default configurations
+```bash
+snort -c /etc/snort/snort.conf -A full -l . -r task9.pcap
+```
+3.Alert file has been created like last time, however since the file is large, use grep to filter to save the results of the same IP packets that are actually valid to another file
+```bash
+grep -A 5 "Same Source-Destination IP Detected" alert > detailed_alerts.txt
+
+cat detailed_alerts.txt
+```
+**Answer:** *7*
+
+**Objective 5:** Case Example - An analyst modified an existing rule successfully. Which rule option must the analyst change after the implementation?
+**Answer:** *rev*
+
+---
+
+## TASK 10 - Snort2 Operation Logic: Points to Remember
+
+**Objective:** Read the task above.
+**Answer:** *No Answer Needed*
 
 ---
 
 ## Conclusion
 
+This room provided hands-on experience with Snort across its core operational modes, reinforcing how an IDS/IPS functions in both real-time detection and offline traffic analysis. By working through sniffer, packet logger, IDS/IPS, and PCAP investigation modes, the lab demonstrated how Snort interprets network traffic, applies rule logic, and generates actionable alerts. Writing and tuning custom rules highlighted the importance of precise rule options, proper revision control, and understanding protocol flags when detecting specific behaviors. Overall, this exercise emphasizes Snort’s effectiveness as a rule-based detection engine and the critical role of accurate configuration and analysis in network security monitoring.
 
 
 
