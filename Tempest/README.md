@@ -7,7 +7,7 @@
 
 ## TL;DR
 
-
+You’re acting as an incident responder analysing a compromised endpoint by reviewing provided endpoint and network artefacts. The goal is to reconstruct the incident, identify malicious activity, and understand attacker behaviour using log and traffic analysis techniques, reinforcing core incident response and forensic investigation skills.
 
 ---
 
